@@ -70,8 +70,7 @@ Result atmosphere(double h) {
     //таблицы для выбора Hi и Ti и Beta
     const double HiTAB[6]   = {11000.0, 20000.0, 32000.0, 47000.0, 51000.0, 71000.0};
     const double TiTAB[6]   = {216.65, 216.65, 228.65, 270.65,  270.65, 214.65};
-    const double BetaTAB[6] = {-0.0065, 0.0, 0.0010, 0.0028, 0.0, -0.0028};
-    
+    const double BetaTAB[7] = {-0.0065, 0.0, 0.0010, 0.0028, 0.0, -0.0028, -0.0020};    
     // Рассчитываем давления на границах слоёв (P_TAB)
     double P_TAB[7];                          // Пункт 3 (вместе с TiTAB выше)
     P_TAB[0] = P0;
@@ -95,12 +94,12 @@ Result atmosphere(double h) {
     double beta = BetaTAB[0]; 
     double Pi = P0;
     // Выбор слоя (перебор снизу вверх)
-    if (H >= 11000.0) { Hi = HiTAB[0]; Ti = TiTAB[0]; beta = BetaTAB[0]; Pi = P_TAB[1]; }
-    if (H >= 20000.0) { Hi = HiTAB[1]; Ti = TiTAB[1]; beta = BetaTAB[1]; Pi = P_TAB[2]; }
-    if (H >= 32000.0) { Hi = HiTAB[2]; Ti = TiTAB[2]; beta = BetaTAB[2]; Pi = P_TAB[3]; }
-    if (H >= 47000.0) { Hi = HiTAB[3]; Ti = TiTAB[3]; beta = BetaTAB[3]; Pi = P_TAB[4]; }
-    if (H >= 51000.0) { Hi = HiTAB[4]; Ti = TiTAB[4]; beta = BetaTAB[4]; Pi = P_TAB[5]; }
-    if (H >= 71000.0) { Hi = HiTAB[5]; Ti = TiTAB[5]; beta = BetaTAB[5]; Pi = P_TAB[6]; }
+    if (H >= 11000.0) { Hi = HiTAB[0]; Ti = TiTAB[0]; beta = BetaTAB[1]; Pi = P_TAB[1]; }
+    if (H >= 20000.0) { Hi = HiTAB[1]; Ti = TiTAB[1]; beta = BetaTAB[2]; Pi = P_TAB[2]; }
+    if (H >= 32000.0) { Hi = HiTAB[2]; Ti = TiTAB[2]; beta = BetaTAB[3]; Pi = P_TAB[3]; }
+    if (H >= 47000.0) { Hi = HiTAB[3]; Ti = TiTAB[3]; beta = BetaTAB[4]; Pi = P_TAB[4]; }
+    if (H >= 51000.0) { Hi = HiTAB[4]; Ti = TiTAB[4]; beta = BetaTAB[5]; Pi = P_TAB[5]; }
+    if (H >= 71000.0) { Hi = HiTAB[5]; Ti = TiTAB[5]; beta = BetaTAB[6]; Pi = P_TAB[6]; }
 
     double T = Ti + beta * (H - Hi);          // Пункт 5
     double p;                                 // Пункт 5
@@ -145,10 +144,12 @@ void testing() {
     if (!fout.is_open()) { //проверка на то что файл огткрылся
     cout << "file cant be opened, run .exe/VScode with admin rights\n";
     return;
-
+    }
     fout << "h;H;T;p;ro;g;a\n"; // Заголовки столбцов
+    
     fout << fixed << setprecision(12); //точность: 12 знаков после запятой
-
+    // fout << scientific << setprecision(15); // второй вариант
+    
     for (int j = 0; j <= 870; ++j) {
         double h = -2000.0 + 100.0 * j;
         
