@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-    double t = 0.0, V = 80.0, theta = atan2(5, 270), x = 0.0, y = 0.0, m = 0.05, a = 0.005, G = m*9.80665;      // Н.У.
+    double t = 0.0, V = 160.75, theta = atan2(5, 270), x = 0.0, y = 0.0, m = 0.000512, a = 0.000, G = m*9.80665;      // Н.У.
     double h = 0.0, Zero1 = 0.0, Zero2 = 0.0;      // Измеряемые величины
     double dt = 0.001;     // шаг 
     int    step = 0;      // счётчик шагов
@@ -24,13 +24,14 @@ int main() {
         theta = atan2(Vy, Vx);
         x += Vx*dt;
         y += Vy*dt;
-        Vx += (-V*a/m*cos(theta))*dt;
-        Vy += (-V*a/m*sin(theta) - G)*dt;
+        Vx += (-V*a/m*cos(theta))/m*dt;
+        Vy += (-V*a/m*sin(theta) - G)/m*dt;
+        
         if (theta > 0) h = y;
-        if (h == y && y < 0.02) Zero1 = x;
-        if (h > y && y > 0.02) Zero2 = x;
+        if (h == y && y < 0.2) Zero1 = x;
+        if (h > y && y > 0.2) Zero2 = x;
 
-        fprintf(file, "%f\t%f\n", x, y); // Данные через табуляцию
+        fprintf(file, "%f\t%f\n", x, y); 
         t += dt;
         ++step;
 
